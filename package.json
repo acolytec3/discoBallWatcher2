@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "vercel dev",
-    "build": "vercel build",
+    "build": "tsc",
     "createCommands": "ts-node -r dotenv/config helpers/createCommand.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
