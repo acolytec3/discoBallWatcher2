@@ -3,11 +3,9 @@ import { InteractionResponseType, InteractionType, verifyKey } from 'discord-int
 import getRawBody from 'raw-body'
 import { commands } from '../helpers/commands';
 
-import { getCollectionData } from './ethNft';
+import { getCollectionData } from './floorPrice';
 
-export const PING_COMMAND = commands[0]
-
-export const NFT_COMMAND = commands[1]
+export const NFT_COMMAND = commands[0]
 
 /**
  * @param {VercelRequest} request
@@ -39,19 +37,10 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
       });
     } else if (message.type === InteractionType.APPLICATION_COMMAND) {
       switch (message.data.name.toLowerCase()) {
-        case PING_COMMAND.name.toLowerCase():
-          console.log(message.data.options)
-          response.status(200).send({
-            type: 4,
-            data: {
-              content: `${request.body.data.options[0].value} yourself`,
-            },
-          });
-          console.log('Ping Request');
-          break;
         case NFT_COMMAND.name.toLowerCase():
           const collectionName = message.data.options[0].value
-          const collectionDetails = await getCollectionData(collectionName)
+          const chain = message.data.options[1].value
+          const collectionDetails = await getCollectionData(collectionName, chain)
           response.status(200).send({
             type: 4,
             data: collectionDetails
