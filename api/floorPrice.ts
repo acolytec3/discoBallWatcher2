@@ -61,7 +61,6 @@ export const getCollectionData = async (collection: string, chain: string) => {
         }),
       });
       const json = await res.json();
-      console.log(json)
       if (json.project_stats.length === 0) {
         return {
           content: "No collection found by that name",
