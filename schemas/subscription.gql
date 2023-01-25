@@ -1,0 +1,13 @@
+type Notification {
+    userName: String!
+    notice: [FloorPrice]!
+}
+
+type FloorPrice @embedded {
+    collection: String!
+    price: String!
+    direction: String!
+}
+type Query {
+    allNotifications: [Notification!]
+}

@@ -17,14 +17,42 @@ export const commands = [
         choices: [
           {
             name: "Ethereum",
-            value: "ETH"
+            value: "ETH",
           },
           {
             name: "Solana",
-            value: "SOL"
-          }
-        ]
+            value: "SOL",
+          },
+        ],
       },
+    ],
+  },
+  {
+    name: "subscription",
+    description: "NFT collection floor price notifier",
+    options: [
+      {
+        name: "collection",
+        description: "the name of an NFT collection",
+        type: ApplicationCommandOptionType.STRING,
+      },
+      {
+        name: "direction",
+        description: "receive notification above or below Floor Price",
+        type: ApplicationCommandOptionType.STRING,
+        choices: [
+          {
+            name: "Above",
+            value: "above",
+          },
+          { name: "Below", value: "below" },
+        ],
+      },
+      {
+        name: "price",
+        description: "floor price to watch",
+        type: ApplicationCommandOptionType.STRING,
+      }
     ],
   },
 ];
