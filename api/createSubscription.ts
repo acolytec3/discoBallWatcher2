@@ -18,7 +18,7 @@ export const createSubscription = async (
     createNotification(
       data: {
         userName: "${userName}"
-        notice: [{ collection: "${collection}", price: "${price.toString()}", direction: "${direction}", chain: "${chain} }]
+        notice: [{ collection: "${collection}", price: "${price.toString()}", direction: "${direction}", chain: "${chain}" }]
       }
     ) {
       notice {
