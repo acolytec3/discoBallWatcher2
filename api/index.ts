@@ -49,7 +49,7 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
           })
           break;
           case SUBSCRIPTION.name.toLowerCase():
-            const res = await createSubscription(message.member.user.id, message.data.options[0].value, message.data.options[2].value, message.data.options[1].value)
+            const res = await createSubscription(message.member.user.id, message.data.options[0].value, message.data.options[2].value, message.data.options[1].value, message.data.options[3].value)
             response.status(200).send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: res

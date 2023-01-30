@@ -4,7 +4,8 @@ export const createSubscription = async (
   userName: string,
   collection: string,
   price: number,
-  direction: string
+  direction: string,
+  chain: string
 ) => {
   if (!userName || !collection || !price || !direction || price < 0) {
     return {
@@ -17,7 +18,7 @@ export const createSubscription = async (
     createNotification(
       data: {
         userName: "${userName}"
-        notice: [{ collection: "${collection}", price: "${price.toString()}", direction: "${direction}" }]
+        notice: [{ collection: "${collection}", price: "${price.toString()}", direction: "${direction}", chain: "${chain} }]
       }
     ) {
       notice {

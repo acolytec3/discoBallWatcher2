@@ -52,7 +52,12 @@ export const commands = [
         name: "price",
         description: "floor price to watch",
         type: ApplicationCommandOptionType.STRING,
-      }
+      },
+      {
+        name: "chain",
+        description: "collection chain",
+        type: ApplicationCommandOptionType.STRING,
+      },
     ],
   },
 ];
