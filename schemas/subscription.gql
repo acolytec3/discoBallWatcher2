@@ -11,4 +11,5 @@ type FloorPrice @embedded {
 }
 type Query {
     allNotifications: [Notification!]
+    notificationsByUser(userName: String!): [Notification!]
 }

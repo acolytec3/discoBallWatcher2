@@ -57,6 +57,16 @@ export const commands = [
         name: "chain",
         description: "collection chain",
         type: ApplicationCommandOptionType.STRING,
+        choices: [
+          {
+            name: "Ethereum",
+            value: "ETH",
+          },
+          {
+            name: "Solana",
+            value: "SOL",
+          },
+        ],
       },
     ],
   },
