@@ -1,3 +1,5 @@
+import { formatDomain } from "../helpers/helpers";
+
 const reservoirApiKey = process.env.RESERVOIR_SECRET!;
 const reservoirURL = "https://api.reservoir.tools/collections/v5";
 const hyperspaceApiKey = process.env.HYPERSPACE_API_KEY;
@@ -26,24 +28,23 @@ export const getCollectionData = async (collection: string, chain: string) => {
         embeds: [
           {
             title: result.name,
-            fields: [
-              {
-                name: "Floor Price",
-                value: `${String(
-                  result.floorAsk.price.amount.decimal
-                )} ETH on ${result.floorAsk.sourceDomain}`,
-              },
-              {
-                name: "Top Bid",
-                value: `${String(result.topBid.price.amount.decimal)} ETH on ${
-                  result.topBid.sourceDomain
-                }`,
-              },
-            ],
             image: {
               url: result.sampleImages[0],
               height: 36,
             },
+          },
+          {
+            title: `Floor Price - ${String(result.floorAsk.price.amount.decimal)} ETH on ${
+              result.floorAsk.sourceDomain
+            }`,
+
+            url: formatDomain(result.floorAsk.sourceDomain, result),
+          },
+          {
+            title: `Top Offer - ${String(result.topBid.price.amount.decimal)} ETH on ${
+              result.topBid.sourceDomain
+            }`,
+            url: formatDomain(result.topBid.sourceDomain, result),
           },
         ],
       };
@@ -73,9 +74,7 @@ export const getCollectionData = async (collection: string, chain: string) => {
             fields: [
               {
                 name: "Floor Price",
-                value: `${String(
-                 json.project_stats[0].floor_price
-                )} SOL`,
+                value: `${String(json.project_stats[0].floor_price)} SOL`,
               },
             ],
             image: {
