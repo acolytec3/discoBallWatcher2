@@ -13,6 +13,7 @@
     "@vercel/node": "^2.8.14",
     "discord-interactions": "^2.0.2",
     "dotenv": "^8.2.0",
+    "hyperspace-client-js": "^1.4.13",
     "raw-body": "^2.4.1",
     "slash-commands": "^1.5.0",
     "ts-node": "^10.9.1",

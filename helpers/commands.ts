@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType } from "slash-commands";
+import { createTrue } from "typescript";
 
 export const commands = [
   {
@@ -9,6 +10,7 @@ export const commands = [
         name: "collection",
         description: "the name of an NFT collection",
         type: ApplicationCommandOptionType.STRING,
+        autocomplete: true
       },
       {
         name: "chain",
