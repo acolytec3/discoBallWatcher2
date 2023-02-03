@@ -77,7 +77,7 @@ export const getCollectionData = async (collection: string, chain: string) => {
                 value: `${String(json.project_stats[0].floor_price)} SOL`,
               },
             ],
-            url: `https://hyperspace.xy/collection/${collection}`,
+            url: `https://hyperspace.xyz/collection/${collection}`,
             image: {
               url: json.project_stats[0].project.img_url,
               height: 36,
