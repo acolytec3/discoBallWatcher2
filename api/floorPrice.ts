@@ -7,9 +7,9 @@ const hyperspaceApiKey = process.env.HYPERSPACE_API_KEY;
 const hsClient = new HyperspaceClient(hyperspaceApiKey!);
 const reservoirApiKey = process.env.RESERVOIR_SECRET!;
 const reservoirURL = "https://api.reservoir.tools/collections/v5";
-export const getCollectionData = async (collection: string, chain: string) => {
+export const getCollectionData = async (chain: string, collection: string) => {
   let options, data;
-  switch (chain) {
+  switch (chain.trim()) {
     case "ETH":
       options = {
         method: "GET",
@@ -52,12 +52,12 @@ export const getCollectionData = async (collection: string, chain: string) => {
         ],
       };
     case "SOL":
-      const res2 = await hsClient.getProjects({
+      const res = await hsClient.getProjects({
         condition: {
           projectIds: [collection]
         },
       });
-      const project = res2.getProjectStats.project_stats?.[0]
+      const project = res.getProjectStats.project_stats?.[0]
       if (!project || project === null) {
           return {
             content: "No collection found by that name",
@@ -81,6 +81,8 @@ export const getCollectionData = async (collection: string, chain: string) => {
           },
         ],
       };
-    
+    default: return {
+      content: "Unknown chain"
+    }
   }
 };

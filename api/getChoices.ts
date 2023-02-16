@@ -7,7 +7,7 @@ const reservoirApiKey = process.env.RESERVOIR_SECRET!;
 const reservoirURL = "https://api.reservoir.tools/collections/v5";
 const hyperspaceApiKey = process.env.HYPERSPACE_API_KEY;
 const hsClient = new HyperspaceClient(hyperspaceApiKey!);
-export const getChoices = async (collectionName: string, chain: string) => {
+export const getChoices = async ( chain: string, collectionName: string) => {
   switch (chain.toLowerCase()) {
     case "eth": {
       const options = {

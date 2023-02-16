@@ -7,15 +7,10 @@ export const commands = [
     description: "get NFT collection data",
     options: [
       {
-        name: "collection",
-        description: "the name of an NFT collection",
-        type: ApplicationCommandOptionType.STRING,
-        autocomplete: true
-      },
-      {
         name: "chain",
         description: "ETH or SOL",
         type: ApplicationCommandOptionType.STRING,
+        required: true,
         choices: [
           {
             name: "Ethereum",
@@ -26,6 +21,13 @@ export const commands = [
             value: "SOL",
           },
         ],
+      },
+      {
+        name: "collection",
+        description: "the name of an NFT collection",
+        type: ApplicationCommandOptionType.STRING,
+        autocomplete: true,
+        required: true
       },
     ],
   },
