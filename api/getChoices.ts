@@ -6,7 +6,6 @@ import {
 const reservoirApiKey = process.env.RESERVOIR_SECRET!;
 const reservoirURL = "https://api.reservoir.tools/collections/v5";
 const hyperspaceApiKey = process.env.HYPERSPACE_API_KEY;
-const hyperspaceRestUrl = "https://beta.api.solanalysis.com/rest";
 const hsClient = new HyperspaceClient(hyperspaceApiKey!);
 export const getChoices = async (collectionName: string, chain: string) => {
   switch (chain.toLowerCase()) {

@@ -1,9 +1,12 @@
 import { formatDomain } from "../helpers/helpers";
+import {
+  HyperspaceClient,
+} from "hyperspace-client-js";
 
+const hyperspaceApiKey = process.env.HYPERSPACE_API_KEY;
+const hsClient = new HyperspaceClient(hyperspaceApiKey!);
 const reservoirApiKey = process.env.RESERVOIR_SECRET!;
 const reservoirURL = "https://api.reservoir.tools/collections/v5";
-const hyperspaceApiKey = process.env.HYPERSPACE_API_KEY;
-const hyperspaceRestUrl = "https://beta.api.solanalysis.com/rest";
 export const getCollectionData = async (collection: string, chain: string) => {
   let options, data;
   switch (chain) {
@@ -49,23 +52,16 @@ export const getCollectionData = async (collection: string, chain: string) => {
         ],
       };
     case "SOL":
-      const res = await fetch(hyperspaceRestUrl + "/get-project-stats", {
-        method: "POST",
-        headers: {
-          Authorization: hyperspaceApiKey!,
-          "Content-Type": "application/json",
+      const res2 = await hsClient.getProjects({
+        condition: {
+          projectIds: [collection]
         },
-        body: JSON.stringify({
-          conditions: {
-            project_ids: [collection],
-          },
-        }),
       });
-      const json = await res.json();
-      if (json.project_stats.length === 0) {
-        return {
-          content: "No collection found by that name",
-        };
+      const project = res2.getProjectStats.project_stats?.[0]
+      if (!project || project === null) {
+          return {
+            content: "No collection found by that name",
+          }; 
       }
       return {
         embeds: [
@@ -74,16 +70,17 @@ export const getCollectionData = async (collection: string, chain: string) => {
             fields: [
               {
                 name: "Floor Price",
-                value: `${String(json.project_stats[0].floor_price)} SOL`,
+                value: `${String(project.floor_price)} SOL`,
               },
             ],
             url: `https://hyperspace.xyz/collection/${collection}`,
             image: {
-              url: json.project_stats[0].project.img_url,
+              url: project.project?.img_url,
               height: 36,
             },
           },
         ],
       };
+    
   }
 };
