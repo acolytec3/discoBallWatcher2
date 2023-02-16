@@ -46,11 +46,11 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
       }
       case 4: {
         // Autocomplete on collection name
-  
-        const collectionName = message.data.options[0].value;
-        const chain = message.data.options[1];
-        if (collectionName.length > 3 && chain?.value !== undefined) {
-          const choices = await getChoices(collectionName, chain.value);
+        const options = message.data.options as any[]
+        const collectionName = options.filter((opt) => opt.name === 'collection')[0].value;
+        const chain = options.filter((opt) => opt.name === 'chain')[0].value;
+        if (collectionName.length > 3 && chain !== undefined) {
+          const choices = await getChoices(chain, collectionName);
           response.send({
             type: 8,
             data: {
