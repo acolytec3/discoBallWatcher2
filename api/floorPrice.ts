@@ -1,7 +1,5 @@
 import { formatDomain } from "../helpers/helpers";
-import {
-  HyperspaceClient,
-} from "hyperspace-client-js";
+import { HyperspaceClient } from "hyperspace-client-js";
 
 const hyperspaceApiKey = process.env.HYPERSPACE_API_KEY;
 const hsClient = new HyperspaceClient(hyperspaceApiKey!);
@@ -10,7 +8,7 @@ const reservoirURL = "https://api.reservoir.tools/collections/v5";
 export const getCollectionData = async (chain: string, collection: string) => {
   let options, data;
   switch (chain.trim()) {
-    case "ETH":
+    case "ETH": {
       options = {
         method: "GET",
         headers: { accept: "*/*", "x-api-key": reservoirApiKey },
@@ -37,31 +35,32 @@ export const getCollectionData = async (chain: string, collection: string) => {
             },
           },
           {
-            title: `Floor Price - ${String(result.floorAsk.price.amount.decimal)} ETH on ${
-              result.floorAsk.sourceDomain
-            }`,
+            title: `Floor Price - ${String(
+              result.floorAsk.price.amount.decimal
+            )} ETH on ${result.floorAsk.sourceDomain}`,
 
             url: formatDomain(result.floorAsk.sourceDomain, result),
           },
           {
-            title: `Top Offer - ${String(result.topBid.price.amount.decimal)} ETH on ${
-              result.topBid.sourceDomain
-            }`,
+            title: `Top Offer - ${String(
+              result.topBid.price.amount.decimal
+            )} ETH on ${result.topBid.sourceDomain}`,
             url: formatDomain(result.topBid.sourceDomain, result),
           },
         ],
       };
-    case "SOL":
+    }
+    case "SOL": {
       const res = await hsClient.getProjects({
         condition: {
-          projectIds: [collection]
+          projectIds: [collection],
         },
       });
-      const project = res.getProjectStats.project_stats?.[0]
+      const project = res.getProjectStats.project_stats?.[0];
       if (!project || project === null) {
-          return {
-            content: "No collection found by that name",
-          }; 
+        return {
+          content: "No collection found by that name",
+        };
       }
       return {
         embeds: [
@@ -81,8 +80,36 @@ export const getCollectionData = async (chain: string, collection: string) => {
           },
         ],
       };
-    default: return {
-      content: "Unknown chain"
     }
+    case "ARB":
+      options = { method: "GET" };
+
+      data = await fetch(
+        `https://api.opensea.io/api/v1/collection/${collection}`,
+        options
+      );
+      const res = await data.json();
+      return {
+        embeds: [
+          {
+            title: res.collection.primary_asset_contracts[0].name,
+            image: {
+              url: res.collection.primary_asset_contracts[0].image_url,
+              height: 36,
+            },
+          },
+          {
+            title: `Floor Price - ${String(
+              res.collection.stats.floor_price
+            )} ETH on Opensea`,
+
+            url: formatDomain("opensea.com", { name: collection }),
+          },
+        ],
+      };
+    default:
+      return {
+        content: "Unknown chain",
+      };
   }
 };

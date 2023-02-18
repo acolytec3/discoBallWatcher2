@@ -13,13 +13,25 @@ export const commands = [
         required: true,
         choices: [
           {
-            name: "Ethereum",
+            name: "Ethereum - search by name (autocomplete)",
             value: "ETH",
           },
           {
-            name: "Solana",
+            name: "Solana - search by name (autocomplete)",
             value: "SOL",
           },
+          {
+            name: "Arbitrum - use Opensea Slug",
+            value: "ARB",
+          },
+          {
+            name: "Optimism - not currently supported",
+            value: "OPT",
+          },
+          {
+            name: "Polygon - not currently supported",
+            value: "POLY",
+          }
         ],
       },
       {
