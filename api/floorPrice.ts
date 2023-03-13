@@ -20,6 +20,12 @@ export const getCollectionData = async (chain: string, collection: string) => {
       );
       const results = await data.json();
       const result = results.collections[0];
+      const priceSource = formatDomain(result.floorAsk.sourceDomain, result)
+      let bidSource: string | undefined = formatDomain(result.topBid.sourceDomain, result) 
+      if (priceSource === bidSource) {
+        // Make bid URL undefined if same as floor price.  Otherwise, Discord will filter out bid embed since duplicate URLs aren't allowed
+        bidSource = undefined
+      }
       if (!result) {
         return {
           content: "No collection found by that name",
@@ -39,13 +45,13 @@ export const getCollectionData = async (chain: string, collection: string) => {
               result.floorAsk.price.amount.decimal
             )} ETH on ${result.floorAsk.sourceDomain}`,
 
-            url: formatDomain(result.floorAsk.sourceDomain, result),
+            url: priceSource,
           },
           {
             title: `Top Offer - ${String(
               result.topBid.price.amount.decimal
             )} ETH on ${result.topBid.sourceDomain}`,
-            url: formatDomain(result.topBid.sourceDomain, result),
+            url: bidSource,
           },
         ],
       };
