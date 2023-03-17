@@ -34,9 +34,7 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
     if (!isValidRequest) {
       return response.status(401).send({ error: "Bad request signature " });
     }
-
     const message = request.body;
-
     switch (message.type) {
       case InteractionType.PING: {
         response.send({
@@ -47,8 +45,8 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
       case 4: {
         // Autocomplete on collection name
         const options = message.data.options as any[]
-        const collectionName = options.filter((opt) => opt.name === 'collection')[0].value;
-        const chain = options.filter((opt) => opt.name === 'chain')[0].value;
+        const collectionName = options[0]['options'][0]['value']
+        const chain = options[0]['name'];
         if (collectionName.length > 3 && chain !== undefined) {
           const choices = await getChoices(chain, collectionName);
           response.send({
@@ -62,23 +60,17 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
             type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
           });
         }
-
         break;
       }
       case InteractionType.APPLICATION_COMMAND: {
         switch (message.data.name.toLowerCase()) {
           case NFT_COMMAND.name.toLowerCase():
-            if (message.data.options[1] === undefined) {
-              response.status(200).send({
-                type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
-              });
-              break;
-            }
-            const collectionName = message.data.options[0].value;
-            const chain = message.data.options[1].value;
+            console.log(message.data.options[0])
+            const collectionName = message.data.options[0].options[0].value;
+            const chain = message.data.options[0].name;
             const collectionDetails = await getCollectionData(
-              collectionName,
-              chain
+              chain,
+              collectionName
             );
             response.status(200).send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -105,6 +97,7 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
         }
       }
       default: {
+        console.log(message.data)
         console.error("Unknown Command");
         response.status(400).send({ error: "Unknown Type" });
         break;

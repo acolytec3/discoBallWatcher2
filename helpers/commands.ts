@@ -1,5 +1,4 @@
 import { ApplicationCommandOptionType } from "slash-commands";
-import { createTrue } from "typescript";
 
 export const commands = [
   {
@@ -7,20 +6,32 @@ export const commands = [
     description: "get NFT collection data",
     options: [
       {
-        name: "chain",
-        description: "ETH or SOL",
-        type: ApplicationCommandOptionType.STRING,
-        required: true,
-        choices: [
-          {
-            name: "Ethereum - search by name (autocomplete)",
-            value: "ETH",
-          },
-          {
-            name: "Solana - search by name (autocomplete)",
-            value: "SOL",
-          },
-          {
+        name: "eth",
+        description: "Search Ethereum collections by name (autocomplete)",
+        type: ApplicationCommandOptionType.SUB_COMMAND,
+               options: [{
+          name: "collection",
+          description: "the name of an NFT collection",
+          type: ApplicationCommandOptionType.STRING,
+          autocomplete: true,
+          required: true
+        },]
+      },
+      {
+        name: "sol",
+        description: "Search Solana collections by name (autocomplete)",
+        type: ApplicationCommandOptionType.SUB_COMMAND,
+           options: [{
+          name: "collection",
+          description: "the name of an NFT collection",
+          type: ApplicationCommandOptionType.STRING,
+          autocomplete: true,
+          required: true
+        },
+      ]
+      },
+    ],
+    /*         {
             name: "Arbitrum - use Opensea Slug",
             value: "ARB",
           },
@@ -33,17 +44,9 @@ export const commands = [
             value: "POLY",
           }
         ],
-      },
-      {
-        name: "collection",
-        description: "the name of an NFT collection",
-        type: ApplicationCommandOptionType.STRING,
-        autocomplete: true,
-        required: true
-      },
-    ],
+      },*/
   },
-  {
+  /*  {
     name: "subscription",
     description: "NFT collection floor price notifier",
     options: [
@@ -85,5 +88,5 @@ export const commands = [
         ],
       },
     ],
-  },
+  },*/
 ];

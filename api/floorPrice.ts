@@ -8,7 +8,7 @@ const reservoirURL = "https://api.reservoir.tools/collections/v5";
 export const getCollectionData = async (chain: string, collection: string) => {
   let options, data;
   switch (chain.trim()) {
-    case "ETH": {
+    case "eth": {
       options = {
         method: "GET",
         headers: { accept: "*/*", "x-api-key": reservoirApiKey },
@@ -56,7 +56,7 @@ export const getCollectionData = async (chain: string, collection: string) => {
         ],
       };
     }
-    case "SOL": {
+    case "sol": {
       const res = await hsClient.getProjects({
         condition: {
           projectIds: [collection],
@@ -87,7 +87,7 @@ export const getCollectionData = async (chain: string, collection: string) => {
         ],
       };
     }
-    case "ARB":
+    case "arb":
       options = { method: "GET" };
 
       data = await fetch(
