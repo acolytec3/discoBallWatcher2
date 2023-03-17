@@ -4,8 +4,10 @@ import {
   InteractionType,
   verifyKey,
 } from "discord-interactions";
+import { HyperspaceClient } from "hyperspace-client-js";
 import getRawBody from "raw-body";
 import { commands } from "../helpers/commands";
+import { getCollectionBids } from "../helpers/queries";
 import { createSubscription } from "./createSubscription";
 
 import { getCollectionData } from "./floorPrice";
@@ -13,12 +15,14 @@ import { getChoices } from "./getChoices";
 
 export const NFT_COMMAND = commands[0];
 export const SUBSCRIPTION = commands[1];
-
+const hyperspaceApiKey = process.env.HYPERSPACE_API_KEY;
+const hsClient = new HyperspaceClient(hyperspaceApiKey!);
 /**
  * @param {VercelRequest} request
  * @param {VercelResponse} response
  */
 module.exports = async (request: VercelRequest, response: VercelResponse) => {
+ // const res: any = await hsClient.graphqlClient.request(getCollectionBids, { projectId: 'okaybears'})
   if (request.method === "POST") {
     const signature = request.headers["x-signature-ed25519"] as string;
     const timestamp = request.headers["x-signature-timestamp"] as string;
@@ -65,7 +69,6 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
       case InteractionType.APPLICATION_COMMAND: {
         switch (message.data.name.toLowerCase()) {
           case NFT_COMMAND.name.toLowerCase():
-            console.log(message.data.options[0])
             const collectionName = message.data.options[0].options[0].value;
             const chain = message.data.options[0].name;
             const collectionDetails = await getCollectionData(

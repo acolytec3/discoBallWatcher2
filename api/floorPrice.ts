@@ -1,5 +1,6 @@
 import { formatDomain } from "../helpers/helpers";
 import { HyperspaceClient } from "hyperspace-client-js";
+import { getCollectionBids } from "../helpers/queries";
 
 const hyperspaceApiKey = process.env.HYPERSPACE_API_KEY;
 const hsClient = new HyperspaceClient(hyperspaceApiKey!);
@@ -57,7 +58,7 @@ export const getCollectionData = async (chain: string, collection: string) => {
       };
     }
     case "sol": {
-      const res = await hsClient.getProjects({
+      let res: any = await hsClient.getProjects({
         condition: {
           projectIds: [collection],
         },
@@ -68,6 +69,8 @@ export const getCollectionData = async (chain: string, collection: string) => {
           content: "No collection found by that name",
         };
       }
+      res = await hsClient.graphqlClient.request(getCollectionBids, { projectId: collection})
+      const bids: { price: Number, fee: Number, amount: Number}[] = res.getCollectionBidsForProject.bids
       return {
         embeds: [
           {
@@ -76,6 +79,10 @@ export const getCollectionData = async (chain: string, collection: string) => {
               {
                 name: "Floor Price",
                 value: `${String(project.floor_price)} SOL`,
+              },
+              {
+                name: "Top Offer",
+                value: `${bids[0].price.toLocaleString(undefined, {maximumFractionDigits: 3})} SOL`,
               },
             ],
             url: `https://hyperspace.xyz/collection/${collection}`,

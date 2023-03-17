@@ -64,3 +64,5 @@ export const updateSubscriptionsQuery = (id: string, userName: string, subscript
       console.log('the query', query)
       return query
 }
+
+export const getCollectionBids = `query GetCollectionBidsForProject($projectId: String!) {\n  getCollectionBidsForProject(project_id: $projectId) {\n    bids {\n  price\n      fee\n      amount\n     }\n    __typename\n  }\n}`
