@@ -21,12 +21,39 @@ export const getCollectionData = async (chain: string, collection: string) => {
       );
       const results = await data.json();
       const result = results.collections[0];
-      const priceSource = formatDomain(result.floorAsk.sourceDomain, result)
-      let bidSource: string | undefined = formatDomain(result.topBid.sourceDomain, result) 
+
+      const priceSource = formatDomain(result.floorAsk.sourceDomain, result);
+
+      const priceEmbed =
+        result.floorAsk.price !== null
+          ? {
+              title: `Floor Price - ${String(
+                result.floorAsk.price.amount.decimal
+              )} ETH on ${result.floorAsk.sourceDomain}`,
+              url: priceSource,
+            }
+          : {
+              title: "No floor price available",
+            };
+      let bidSource: string | undefined = formatDomain(
+        result.topBid.sourceDomain,
+        result
+      );
       if (priceSource === bidSource) {
         // Make bid URL undefined if same as floor price.  Otherwise, Discord will filter out bid embed since duplicate URLs aren't allowed
-        bidSource = undefined
+        bidSource = undefined;
       }
+      const bidEmbed =
+        result.topBid.price !== null
+          ? {
+              title: `Top Offer - ${String(
+                result.topBid.price.amount.decimal
+              )} ETH on ${result.topBid.sourceDomain}`,
+              url: bidSource,
+            }
+          : {
+              title: "No bids available",
+            };
       if (!result) {
         return {
           content: "No collection found by that name",
@@ -41,19 +68,8 @@ export const getCollectionData = async (chain: string, collection: string) => {
               height: 36,
             },
           },
-          {
-            title: `Floor Price - ${String(
-              result.floorAsk.price.amount.decimal
-            )} ETH on ${result.floorAsk.sourceDomain}`,
-
-            url: priceSource,
-          },
-          {
-            title: `Top Offer - ${String(
-              result.topBid.price.amount.decimal
-            )} ETH on ${result.topBid.sourceDomain}`,
-            url: bidSource,
-          },
+          priceEmbed,
+          bidEmbed,
         ],
       };
     }
@@ -69,8 +85,11 @@ export const getCollectionData = async (chain: string, collection: string) => {
           content: "No collection found by that name",
         };
       }
-      res = await hsClient.graphqlClient.request(getCollectionBids, { projectId: collection})
-      const bids: { price: Number, fee: Number, amount: Number}[] = res.getCollectionBidsForProject.bids
+      res = await hsClient.graphqlClient.request(getCollectionBids, {
+        projectId: collection,
+      });
+      const bids: { price: Number; fee: Number; amount: Number }[] =
+        res.getCollectionBidsForProject.bids;
       return {
         embeds: [
           {
@@ -82,7 +101,9 @@ export const getCollectionData = async (chain: string, collection: string) => {
               },
               {
                 name: "Top Offer",
-                value: `${bids[0].price.toLocaleString(undefined, {maximumFractionDigits: 3})} SOL`,
+                value: `${bids[0].price.toLocaleString(undefined, {
+                  maximumFractionDigits: 3,
+                })} SOL`,
               },
             ],
             url: `https://hyperspace.xyz/collection/${collection}`,

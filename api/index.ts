@@ -22,7 +22,6 @@ const hsClient = new HyperspaceClient(hyperspaceApiKey!);
  * @param {VercelResponse} response
  */
 module.exports = async (request: VercelRequest, response: VercelResponse) => {
- // const res: any = await hsClient.graphqlClient.request(getCollectionBids, { projectId: 'okaybears'})
   if (request.method === "POST") {
     const signature = request.headers["x-signature-ed25519"] as string;
     const timestamp = request.headers["x-signature-timestamp"] as string;
@@ -48,9 +47,9 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
       }
       case 4: {
         // Autocomplete on collection name
-        const options = message.data.options as any[]
-        const collectionName = options[0]['options'][0]['value']
-        const chain = options[0]['name'];
+        const options = message.data.options as any[];
+        const collectionName = options[0]["options"][0]["value"];
+        const chain = options[0]["name"];
         if (collectionName.length > 3 && chain !== undefined) {
           const choices = await getChoices(chain, collectionName);
           response.send({
@@ -71,14 +70,24 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
           case NFT_COMMAND.name.toLowerCase():
             const collectionName = message.data.options[0].options[0].value;
             const chain = message.data.options[0].name;
-            const collectionDetails = await getCollectionData(
-              chain,
-              collectionName
-            );
-            response.status(200).send({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: collectionDetails,
-            });
+            try {
+              const collectionDetails = await getCollectionData(
+                chain,
+                collectionName
+              ); 
+              response.status(200).send({
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: collectionDetails,
+              });
+            } catch (err) {
+              console.log(err)
+              response.status(200).send({
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: {
+                  content: "Something went wrong. Tell the mods!",
+                },
+              });
+            }
             return;
           case SUBSCRIPTION.name.toLowerCase():
             const res = await createSubscription(
@@ -100,7 +109,7 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
         }
       }
       default: {
-        console.log(message.data)
+        console.log(message.data);
         console.error("Unknown Command");
         response.status(400).send({ error: "Unknown Type" });
         break;
