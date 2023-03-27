@@ -106,7 +106,9 @@ export const getCollectionData = async (chain: string, collection: string) => {
             fields: [
               {
                 name: "Floor Price",
-                value: `${String(project.floor_price)} SOL`,
+                value: `${project.floor_price.toLocaleString(undefined, {
+                  maximumFractionDigits: 3})
+                } SOL`,
               },
               bidEmbed,
             ],
