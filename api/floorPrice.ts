@@ -90,21 +90,25 @@ export const getCollectionData = async (chain: string, collection: string) => {
       });
       const bids: { price: Number; fee: Number; amount: Number }[] =
         res.getCollectionBidsForProject.bids;
+      const bidEmbed = bids.length > 0 ? {
+        name: "Top Offer",
+        value: `${bids[0].price.toLocaleString(undefined, {
+          maximumFractionDigits: 3,
+        })} SOL`,
+      } : {
+        name: "Top Offer",
+        value: "No offers found"
+      }
       return {
         embeds: [
           {
-            title: collection,
+            title: project.project.display_name,
             fields: [
               {
                 name: "Floor Price",
                 value: `${String(project.floor_price)} SOL`,
               },
-              {
-                name: "Top Offer",
-                value: `${bids[0].price.toLocaleString(undefined, {
-                  maximumFractionDigits: 3,
-                })} SOL`,
-              },
+              bidEmbed,
             ],
             url: `https://hyperspace.xyz/collection/${collection}`,
             image: {

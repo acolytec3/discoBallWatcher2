@@ -53,8 +53,12 @@ export const formatDomain = (domain: string, collection: any) => {
     case "looksrare.org": {
       return `https://looksrare.org/collections/${collection.primaryContract}`
     }
-    default: {
+    case "opensea.io":
+    case "blur.io":  {
       return `https://${domain}/collection/${collection.name.toLowerCase()}`;
+    }
+    default: {
+      return `https://${domain}`
     }
   }
 };
