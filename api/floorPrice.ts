@@ -16,14 +16,19 @@ export const getCollectionData = async (chain: string, collection: string) => {
       };
 
       data = await fetch(
-        reservoirURL + `?name=${collection}&includeTopBid=true`,
+        reservoirURL + `?slug=${collection}&includeTopBid=true`,
         options
       );
       const results = await data.json();
       const result = results.collections[0];
 
-      const priceSource = formatDomain(result.floorAsk.sourceDomain, result);
+      if (!result) {
+        return {
+          content: "No collection found by that name",
+        };
+      }
 
+      const priceSource = formatDomain(result.floorAsk.sourceDomain, result);
       const priceEmbed =
         result.floorAsk.price !== null
           ? {
@@ -54,11 +59,7 @@ export const getCollectionData = async (chain: string, collection: string) => {
           : {
               title: "No bids available",
             };
-      if (!result) {
-        return {
-          content: "No collection found by that name",
-        };
-      }
+
       return {
         embeds: [
           {

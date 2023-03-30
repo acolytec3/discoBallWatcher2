@@ -89,7 +89,7 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
               });
             }
             return;
-          case SUBSCRIPTION.name.toLowerCase():
+        /*  case SUBSCRIPTION.name.toLowerCase():
             const res = await createSubscription(
               message.member.user.id,
               message.data.options[0].value,
@@ -101,7 +101,7 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: res,
             });
-            return;
+            return;*/
           default:
             console.error("Unknown Command");
             response.status(400).send({ error: "Unknown Type" });

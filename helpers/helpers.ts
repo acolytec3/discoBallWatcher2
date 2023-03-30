@@ -55,7 +55,7 @@ export const formatDomain = (domain: string, collection: any) => {
     }
     case "opensea.io":
     case "blur.io":  {
-      return `https://${domain}/collection/${collection.name.toLowerCase()}`;
+      return `https://${domain}/collection/${collection.slug.toLowerCase()}`;
     }
     default: {
       return `https://${domain}`

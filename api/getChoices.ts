@@ -22,7 +22,7 @@ export const getChoices = async ( chain: string, collectionName: string) => {
       const results = await data.json();
       const choices = results.collections.map((col: any) => {
         return {
-          name: col.slug,
+          name: col.name,
           value: col.slug,
         };
       });
